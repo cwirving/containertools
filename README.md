@@ -30,7 +30,7 @@ Usage example: extract the `debian:bookworm-slim` image to the `~/test` director
 ```
 ❯ deno run --allow-run --allow-read --allow-write cmd/extract_container_image.ts debian:bookworm-slim ~/test
 
-❯ ls -l ~/Downloads/test
+❯ ls -l ~/test
 total 0
 lrwxr-xr-x@  1 user  staff    38 Oct  2 20:47 bin@ -> /Users/user/test/usr/bin
 drwxr-xr-x@  2 user  staff    64 Oct  2 20:47 boot/
@@ -50,4 +50,11 @@ drwxr-xr-x@  2 user  staff    64 Oct  2 20:47 sys/
 drwxrwxrwt@  2 user  staff    64 Oct  2 20:47 tmp/
 drwxr-xr-x@ 11 user  staff   352 Oct  2 20:47 usr/
 drwxr-xr-x@ 13 user  staff   416 Oct  2 20:47 var/
+```
+### Running the tool without cloning the repo
+
+Since Deno will run scripts directly from URLs, you can also just run it like this:
+
+```
+deno run https://raw.githubusercontent.com/cwirving/containertools/main/cmd/extract_container_image.ts --help
 ```
