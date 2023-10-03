@@ -1,0 +1,8 @@
+{
+  "tasks": {
+    "test": "deno test --allow-read --allow-write tests/*_test.ts",
+    "lint": "deno lint *.ts src/*.ts tests/*.ts",
+    "check": "deno check *.ts src/*.ts tests/*.ts",
+    "fmt": "deno fmt *.ts src/*.ts tests/*.ts"
+  }
+}
