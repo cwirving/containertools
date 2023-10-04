@@ -39,8 +39,12 @@ import {
 import { readAll } from "https://deno.land/std@0.203.0/streams/read_all.ts";
 type Reader = Deno.Reader;
 
+/**
+ * Extend TarMeta with the `linkName` property so that readers can access
+ * symbolic link values without polluting the world of archive writers.
+ */
 export interface TarMetaWithLinkName extends TarMeta {
-  linkName: string;
+  linkName?: string;
 }
 
 export interface TarHeader {
@@ -253,18 +257,14 @@ export class Untar {
     // get meta data
     const meta: TarMetaWithLinkName = {
       fileName: decoder.decode(trim(header.fileName)),
-      linkName: decoder.decode(trim(header.linkName)),
     };
     const fileNamePrefix = trim(header.fileNamePrefix);
     if (fileNamePrefix.byteLength > 0) {
       meta.fileName = decoder.decode(fileNamePrefix) + "/" + meta.fileName;
     }
-    (["fileMode", "mtime", "uid", "gid"] as [
-      "fileMode",
-      "mtime",
-      "uid",
-      "gid",
-    ]).forEach((key) => {
+    (
+      ["fileMode", "mtime", "uid", "gid"] as ["fileMode", "mtime", "uid", "gid"]
+    ).forEach((key) => {
       const arr = trim(header[key]);
       if (arr.byteLength > 0) {
         meta[key] = parseInt(decoder.decode(arr), 8);
@@ -281,6 +281,12 @@ export class Untar {
 
     meta.fileSize = parseInt(decoder.decode(header.fileSize), 8);
     meta.type = FileTypes[parseInt(meta.type!)] ?? meta.type;
+
+    // Only create the `linkName` property for symbolic links to minimize
+    // the effect on existing code that only deals with non-links.
+    if (meta.type === "symlink") {
+      meta.linkName = decoder.decode(trim(header.linkName));
+    }
 
     return meta;
   }

@@ -200,6 +200,9 @@ async function extractLayers(
 
           case "symlink": {
             const destination = nestedEntry.linkName;
+            if(!destination) {
+              throw new Error(`Missing link destination for file ${nestedEntry.fileName}`);
+            }
             // Symlinks can either be absolute or relative to the link location
             const destinationPath = Path.isAbsolute(destination)
               ? Path.normalize(Path.join(directory, destination))
@@ -347,7 +350,8 @@ async function extractContainerImage(
     if (options.verbose) {
       console.log(`Saving image archive to ${tarFile}`);
     }
-    const saveResult = await docker.image.save(image, { output: tarFile });
+    
+    await docker.image.save(image, { output: tarFile });
 
     const dockerRepoPrefix = "docker.io/library/";
     const shortImageName = image.startsWith(dockerRepoPrefix) ? image.substring(dockerRepoPrefix.length) : image;

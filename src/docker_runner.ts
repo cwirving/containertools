@@ -58,8 +58,8 @@ export class DockerCommandRunner implements SubCommandRunner {
       "--format",
       "json",
     ]);
-    return new Promise(
-      (resolve: (_: unknown) => void, reject: (_: unknown) => void) => {
+    return new Promise<DockerVersion>(
+      (resolve: (_: DockerVersion) => void, reject: (_: unknown) => void) => {
         outputPromise
           .then((output) => resolve(JSON.parse(output.getStdout())))
           .catch((reason) => reject(reason));
