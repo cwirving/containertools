@@ -1,4 +1,3 @@
-
 export interface CommandRunInput {
   command: string | URL;
   args: string[];
@@ -36,7 +35,7 @@ export class CommandOutputExtender implements ExtendedCommandOutput {
   }
 
   getStderr(): string {
-    if(this.#cachedStderr === undefined) {
+    if (this.#cachedStderr === undefined) {
       this.#cachedStderr = this.#outputDecoder.decode(this.stderr);
     }
 
@@ -44,7 +43,7 @@ export class CommandOutputExtender implements ExtendedCommandOutput {
   }
 
   getStdout(): string {
-    if(this.#cachedStdout === undefined) {
+    if (this.#cachedStdout === undefined) {
       this.#cachedStdout = this.#outputDecoder.decode(this.stdout);
     }
 
@@ -52,7 +51,8 @@ export class CommandOutputExtender implements ExtendedCommandOutput {
   }
 }
 
-export class CommandRunError extends Error implements CommandRunInput, ExtendedCommandOutput {
+export class CommandRunError extends Error
+  implements CommandRunInput, ExtendedCommandOutput {
   readonly #input: CommandRunInput;
   readonly #output: ExtendedCommandOutput;
 
@@ -105,18 +105,29 @@ export class CommandRunError extends Error implements CommandRunInput, ExtendedC
 }
 
 export interface CommandRunner {
-  runCommand(command: string | URL, args: string[], options?: CommandRunOptions): Promise<ExtendedCommandOutput>;
+  runCommand(
+    command: string | URL,
+    args: string[],
+    options?: CommandRunOptions,
+  ): Promise<ExtendedCommandOutput>;
 }
 
 export interface SubCommandRunner {
-  runSubCommand(subCommand: string, args: string[], options?: CommandRunOptions): Promise<ExtendedCommandOutput>;
+  runSubCommand(
+    subCommand: string,
+    args: string[],
+    options?: CommandRunOptions,
+  ): Promise<ExtendedCommandOutput>;
 }
 
 export class CommandRunnerImpl implements CommandRunner {
-
-  public async runCommand(command: string | URL | null, args: string[], options?: CommandRunOptions): Promise<ExtendedCommandOutput> {
+  public async runCommand(
+    command: string | URL | null,
+    args: string[],
+    options?: CommandRunOptions,
+  ): Promise<ExtendedCommandOutput> {
     // This runner has no default command, so we throw an exception if the command is `null`.
-    if(command === null) {
+    if (command === null) {
       throw new TypeError("CommandRunnerImpl:run() -- command is null");
     }
 
@@ -124,7 +135,7 @@ export class CommandRunnerImpl implements CommandRunner {
       command: command,
       args: args,
       options: options,
-    }
+    };
 
     const cmd = new Deno.Command(
       command,
@@ -136,7 +147,7 @@ export class CommandRunnerImpl implements CommandRunner {
         signal: options?.signal,
         stdin: "null",
         stdout: "piped",
-        stderr: "piped"
+        stderr: "piped",
       },
     );
 

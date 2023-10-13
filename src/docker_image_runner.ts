@@ -1,4 +1,8 @@
-import { CommandRunOptions, ExtendedCommandOutput, SubCommandRunner } from "./command_runner.ts";
+import {
+  CommandRunOptions,
+  ExtendedCommandOutput,
+  SubCommandRunner,
+} from "./command_runner.ts";
 import { Promise } from "https://esm.sh/v111/ioredis@5.3.1/deno/ioredis.js";
 
 /**
@@ -40,7 +44,6 @@ export interface DockerImageSaveOptions {
   output?: string;
 }
 
-
 export class DockerImageRunner implements SubCommandRunner {
   readonly #parentRunner: SubCommandRunner;
 
@@ -61,39 +64,47 @@ export class DockerImageRunner implements SubCommandRunner {
   }
 
   public build(context: string | URL, options?: DockerImageBuildOptions) {
-    if(typeof context !== "string") {
+    if (typeof context !== "string") {
       context = context.toString();
     }
 
     const args: string[] = [];
-    if(options?.target){
+    if (options?.target) {
       args.push("--target", options.target);
     }
 
     return this.runSubCommand("build", args);
   }
 
-  public pull(imageName: string, options?: DockerImagePullOptions): Promise<ExtendedCommandOutput> {
+  public pull(
+    imageName: string,
+    options?: DockerImagePullOptions,
+  ): Promise<ExtendedCommandOutput> {
     const args: string[] = [];
-    if(typeof options?.allTags === "boolean") {
+    if (typeof options?.allTags === "boolean") {
       args.push(`--all-tags=${options.allTags.toString()}`);
     }
-    if(typeof options?.disableContentTrust === "boolean") {
-      args.push(`--disable-content-trust=${options.disableContentTrust.toString()}`);
+    if (typeof options?.disableContentTrust === "boolean") {
+      args.push(
+        `--disable-content-trust=${options.disableContentTrust.toString()}`,
+      );
     }
-    if(typeof options?.platform === "string") {
+    if (typeof options?.platform === "string") {
       args.push("--platform", options.platform);
     }
-    if(typeof options?.quiet === "boolean") {
+    if (typeof options?.quiet === "boolean") {
       args.push(`--quiet=${options.quiet.toString()}`);
     }
 
     return this.runSubCommand("pull", args.concat(imageName));
   }
 
-  public save(imageName: string, options?: DockerImageSaveOptions): Promise<ExtendedCommandOutput> {
+  public save(
+    imageName: string,
+    options?: DockerImageSaveOptions,
+  ): Promise<ExtendedCommandOutput> {
     const args: string[] = [];
-    if(options?.output){
+    if (options?.output) {
       args.push("--output", options.output);
     }
 

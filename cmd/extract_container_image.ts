@@ -1,8 +1,7 @@
-import { Command, Path, Streams } from "./deps.ts";
+import { Command, Path, Streams, Untar } from "./deps.ts";
 import { DockerCommandRunner } from "../src/docker_runner.ts";
 import { CommandRunError } from "../src/command_runner.ts";
 import { asyncDeferred, deferred } from "../src/deferred.ts";
-import { Untar } from "../vendor/untar.ts";
 
 interface ExtractContainerOptions {
   pull: boolean;
@@ -350,7 +349,7 @@ async function extractContainerImage(
     if (options.verbose) {
       console.log(`Saving image archive to ${tarFile}`);
     }
-    
+
     await docker.image.save(image, { output: tarFile });
 
     const dockerRepoPrefix = "docker.io/library/";

@@ -10,6 +10,6 @@ export function asyncDeferred(f: () => Promise<void>): AsyncDisposable {
   return {
     [Symbol.asyncDispose]() {
       return f();
-    }
-  }
+    },
+  };
 }

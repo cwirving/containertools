@@ -75,4 +75,3 @@ export class DockerCommandRunner implements SubCommandRunner {
     return this.#image;
   }
 }
-
