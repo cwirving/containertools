@@ -185,7 +185,7 @@ export class CommandRunError extends Error
 
 /**
  * Interface implemented by command runners.
- * 
+ *
  * Command runners are opinionated wrappers around the Deno `Command` class that
  * are intended to run individual command subprocesses. One key difference is that they
  * throw an exception if the child process does not succeed.

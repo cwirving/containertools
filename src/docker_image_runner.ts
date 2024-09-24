@@ -3,7 +3,6 @@ import {
   ExtendedCommandOutput,
   SubCommandRunner,
 } from "./command_runner.ts";
-import { Promise } from "https://esm.sh/v111/ioredis@5.3.1/deno/ioredis.js";
 
 /**
  * Options for the `docker image build` command.
